@@ -1,37 +1,47 @@
 use sycamore::prelude::*;
 
-#[derive(Props)]
-struct Counter<'a> {
-    count: &'a ReadSignal<i32>,
-}
+mod card;
+use card::*;
 
-#[component]
-fn Counter<'a, G: Html>(cx: Scope<'a>, props: Counter<'a>) -> View<G> {
-    view! { cx,
-    div(class="container text-center bg-gray-400 my-6 mx-auto p-3 w-2/3 rounded") {
-        p(class="text-9xl") {
-            (props.count.get())
-        }
-    }
-    }
-}
+mod nav;
+use nav::Nav;
 
 #[component]
 fn App<G: Html>(cx: Scope) -> View<G> {
+    let mut db: Vec<Recipe> = Vec::new();
+    let recipes: &Signal<Vec<Recipe>> = create_signal(cx, Vec::new()); 
+    let search = create_signal(cx, String::new());
 
-    let count = create_signal(cx, 0);
-    let increment = |_| count.set(*count.get() + 1);
+    // let search_recipes = |_| recipes.set(get_recipes_from_search(search.get(), db));
+
+    let recipe = Recipe {
+        name: "Tomato Sandwich".into(),
+        time: "2 minutes".into(),
+        ingredients: vec!["1 tomato".into(), "2 slices of bread".into()],
+        steps: vec!["Slice the tomato".into(), "Place the tomato between the slices of bread".into()],
+    };
+
+    db.push(Recipe {
+        name: "Tomato Sandwich".into(),
+        time: "2 minutes".into(),
+        ingredients: vec!["1 tomato".into(), "2 slices of bread".into()],
+        steps: vec!["Slice the tomato".into(), "Place the tomato between the slices of bread".into()],
+    });
 
     view! { cx,
-        div(class="container text-center bg-gray-800 my-6 mx-auto p-3 w-2/3 rounded") {
-            h1(class="text-white text-2xl") { "Hello, World" }
+        Nav {}
+        div(class="flex mx-auto my-3 w-2/3") {
+            input(class="mx-6 w-full shadow appearance-none border p-2", type="search", placeholder="Search...", bind:value=search)
+            button(class="border bg-purple-300 m-2 p-2 rounded") { "Search" }
         }
 
-        Counter(count=count)
-        div(class="my-6 mx-auto w-2/3") {
-            button(on:click=increment, class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full rounded") { "+" }
-        }
-
+        RecipeCard(name=recipe.name, time=recipe.time, ingredients=recipe.ingredients, steps=recipe.steps)
+        Indexed(
+            iterable=recipes,
+            view=|cx, recipe| view! { cx,
+                RecipeCard(name=recipe.name, time=recipe.time, ingredients=recipe.ingredients, steps=recipe.steps)
+            },
+        )
     }
 }
 
