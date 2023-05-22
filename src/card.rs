@@ -9,7 +9,7 @@ pub struct Recipe {
 }
 
 pub fn get_recipes_from_search(search: String, db: Vec<Recipe>) -> Vec<Recipe> {
-    db.clone().into_iter().filter(|recipe| recipe.name.to_lowercase() == search.to_lowercase()).collect()
+    db.into_iter().filter(|recipe| recipe.name.to_lowercase().contains(search.to_lowercase().as_str())).collect()
 }
 
 #[component]

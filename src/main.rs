@@ -12,30 +12,28 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     let recipes: &Signal<Vec<Recipe>> = create_signal(cx, Vec::new()); 
     let search = create_signal(cx, String::new());
 
-    // let search_recipes = |_| recipes.set(get_recipes_from_search(search.get(), db));
-
-    let recipe = Recipe {
-        name: "Tomato Sandwich".into(),
-        time: "2 minutes".into(),
-        ingredients: vec!["1 tomato".into(), "2 slices of bread".into()],
-        steps: vec!["Slice the tomato".into(), "Place the tomato between the slices of bread".into()],
-    };
-
     db.push(Recipe {
         name: "Tomato Sandwich".into(),
         time: "2 minutes".into(),
         ingredients: vec!["1 tomato".into(), "2 slices of bread".into()],
         steps: vec!["Slice the tomato".into(), "Place the tomato between the slices of bread".into()],
     });
+    db.push(Recipe {
+        name: "Tofu Sandwich".into(),
+        time: "3 minutes".into(),
+        ingredients: vec!["1 block of tofu".into(), "2 slices of bread".into()],
+        steps: vec!["Slice the tofu".into(), "Place the tofu between the slices of bread".into()],
+    });
+
+    let search_recipes = move |_| recipes.set(get_recipes_from_search(search.get().as_ref().clone(), db.clone()));
 
     view! { cx,
         Nav {}
         div(class="flex mx-auto my-3 w-2/3") {
             input(class="mx-6 w-full shadow appearance-none border p-2", type="search", placeholder="Search...", bind:value=search)
-            button(class="border bg-purple-300 m-2 p-2 rounded") { "Search" }
+            button(class="border bg-purple-300 m-2 p-2 rounded", on:click=search_recipes) { "Search" }
         }
 
-        RecipeCard(name=recipe.name, time=recipe.time, ingredients=recipe.ingredients, steps=recipe.steps)
         Indexed(
             iterable=recipes,
             view=|cx, recipe| view! { cx,
