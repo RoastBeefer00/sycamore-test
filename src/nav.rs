@@ -4,8 +4,8 @@ use sycamore::prelude::*;
 pub fn Nav<'a, G: Html> (cx: Scope) -> View<G> {
 
     view! { cx,
-        div(class="bg-purple-900 p-2 text-center") {
-            h1(class="text-white text-7xl") {
+        div(class="bg-slate-800 p-4 text-center") {
+            h1(class="text-white text-7xl shadow") {
                 "WE NEED TO COOK"
             }
         }
