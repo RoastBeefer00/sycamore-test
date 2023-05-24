@@ -20,9 +20,9 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
     let steps = create_signal(cx, recipe.steps);
 
     view! {cx,
-        div(class="rounded my-3 mx-auto w-2/3") {
+        div(class="rounded my-3 mx-auto w-2/3 border-2 border-indigo-700 shadow") {
             // name
-            div(class="rounded-t w-full p-3 bg-slate-600") {
+            div(class="rounded-t w-full p-3 bg-indigo-900 border-b-2 border-b-indigo-700") {
                 p(class="text-2xl text-white") {
                     (recipe.name)
                 }

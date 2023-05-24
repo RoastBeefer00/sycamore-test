@@ -40,7 +40,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     view! { cx,
         Nav {}
         div(class="flex mx-auto my-3 w-2/3") {
-            input(class="flex-initial mx-6 w-full shadow appearance-none border p-2", type="search", placeholder="Press 'Enter' to search...", bind:value=search, on:keyup=handle_keyup)
+            input(class="flex-initial mx-6 w-full shadow rounded appearance-none border-8 border-indigo-700 p-2", type="search", placeholder="Press 'Enter' to search...", bind:value=search, on:keyup=handle_keyup)
             // button(class="flex-initial border bg-purple-300 mx-2 p-2 rounded", on:click=search_recipes) { "Search" }
         }
 
