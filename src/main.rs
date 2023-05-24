@@ -33,13 +33,13 @@ fn App<G: Html>(cx: Scope) -> View<G> {
 
     let handle_keyup = |event: KeyboardEvent| {
         if event.key() == "Enter" {
-            recipes.set(get_recipes_from_search(search.get().as_ref().clone(), &db.get().as_ref().clone()));
+            recipes.set(get_recipes_from_search(search.get().as_ref().clone(), &db.get().as_ref().clone(), recipes));
         }
     };
 
     view! { cx,
         Nav {}
-        div(class="flex mx-auto my-3 w-2/3") {
+        div(class="flex mx-auto my-3 lg:w-2/3 w-4/5") {
             input(class="flex-initial mx-6 w-full shadow rounded appearance-none border-8 border-indigo-700 p-2", type="search", placeholder="Press 'Enter' to search...", bind:value=search, on:keyup=handle_keyup)
             // button(class="flex-initial border bg-purple-300 mx-2 p-2 rounded", on:click=search_recipes) { "Search" }
         }

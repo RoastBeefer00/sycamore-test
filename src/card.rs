@@ -1,5 +1,6 @@
 use sycamore::prelude::*;
 use uuid::Uuid;
+use itertools::Itertools;
 
 #[derive(Props, Clone, PartialEq, Eq, Hash)]
 pub struct Recipe {
@@ -10,8 +11,19 @@ pub struct Recipe {
     pub id: Uuid,
 }
 
-pub fn get_recipes_from_search(search: String, db: &Vec<Recipe>) -> Vec<Recipe> {
-    db.clone().into_iter().filter(|recipe| recipe.name.to_lowercase().contains(search.to_lowercase().as_str())).collect()
+pub fn get_recipes_from_search(search: String, db: &Vec<Recipe>, recipes: &Signal<Vec<Recipe>>) -> Vec<Recipe> {
+    let current_recipes = recipes.get().as_ref().clone();
+    let to_add = db.clone().into_iter().filter(|recipe| recipe.name.to_lowercase().contains(search.to_lowercase().as_str())).collect();
+    let mut ret = [current_recipes, to_add].concat();
+    ret.sort_by_key(|recipe| recipe.id);
+    ret.dedup_by_key(|recipe| recipe.id);
+    ret
+}
+
+pub fn remove_recipe(recipes: &Signal<Vec<Recipe>>, id: Uuid) -> Vec<Recipe> {
+    let current_recipes = recipes.get().as_ref().clone();
+    let ret = current_recipes.into_iter().filter(|recipe| recipe.id != id).collect();
+    ret
 }
 
 #[component]
@@ -20,7 +32,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
     let steps = create_signal(cx, recipe.steps);
 
     view! {cx,
-        div(class="rounded my-3 mx-auto lg:w-2/3 border-2 border-indigo-700 shadow") {
+        div(class="rounded my-3 mx-auto lg:w-2/3 w-11/12 border-2 border-indigo-700 shadow") {
             // name
             div(class="rounded-t w-full p-3 bg-indigo-900 border-b-2 border-b-indigo-700") {
                 p(class="text-2xl text-white") {
@@ -54,6 +66,9 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                         },
                     )  
                 }
+            }
+            div(class="text-white") {
+                (recipe.id.to_string())
             }
         }
     }
