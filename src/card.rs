@@ -1,8 +1,9 @@
 use sycamore::prelude::*;
 use uuid::Uuid;
-use itertools::Itertools;
+use crate::recipes::AppState;
+use serde::{Serialize, Deserialize};
 
-#[derive(Props, Clone, PartialEq, Eq, Hash)]
+#[derive(Props, Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Recipe {
     pub name: String,
     pub time: String,
@@ -11,25 +12,27 @@ pub struct Recipe {
     pub id: Uuid,
 }
 
-pub fn get_recipes_from_search(search: String, db: &Vec<Recipe>, recipes: &Signal<Vec<Recipe>>) -> Vec<Recipe> {
-    let current_recipes = recipes.get().as_ref().clone();
-    let to_add = db.clone().into_iter().filter(|recipe| recipe.name.to_lowercase().contains(search.to_lowercase().as_str())).collect();
-    let mut ret = [current_recipes, to_add].concat();
-    ret.sort_by_key(|recipe| recipe.id);
-    ret.dedup_by_key(|recipe| recipe.id);
-    ret
+#[derive(Serialize, Deserialize, Clone)]
+pub struct RecipeNoId {
+    pub name: String,
+    pub time: String,
+    pub ingredients: Vec<String>,
+    pub steps: Vec<String>,
 }
 
-pub fn remove_recipe(recipes: &Signal<Vec<Recipe>>, id: Uuid) -> Vec<Recipe> {
-    let current_recipes = recipes.get().as_ref().clone();
-    let ret = current_recipes.into_iter().filter(|recipe| recipe.id != id).collect();
-    ret
+impl RecipeNoId {
+    pub fn add_id(&self) -> Recipe {
+        Recipe { name: self.name.clone(), time: self.time.clone(), ingredients: self.ingredients.clone(), steps: self.steps.clone(), id: Uuid::new_v4() }
+    }
 }
 
 #[component]
 pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
+    let app_state = use_context::<AppState>(cx);
     let ingredients = create_signal(cx, recipe.ingredients);
     let steps = create_signal(cx, recipe.steps);
+
+    let remove_recipe = move |_| app_state.remove_recipe(recipe.id);
 
     view! {cx,
         div(class="rounded my-3 mx-auto lg:w-2/3 w-11/12 border-2 border-indigo-700 shadow") {
@@ -41,6 +44,9 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                 // time
                 p(class="text-white") {
                     (recipe.time)
+                }
+                button(class="rounded bg-red-700 text-white", on:click=remove_recipe) {
+                    "Remove"
                 }
             }
             // ingredients
@@ -66,9 +72,6 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                         },
                     )  
                 }
-            }
-            div(class="text-white") {
-                (recipe.id.to_string())
             }
         }
     }
