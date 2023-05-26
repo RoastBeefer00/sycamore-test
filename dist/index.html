@@ -1,14 +1,41 @@
 <!DOCTYPE html><html class="bg-slate-800"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/sycamore-test/tailwind-4b5642d5269d2559.css">
+    <link rel="stylesheet" href="/tailwind-4b5642d5269d2559.css">
     
     <title>My first Sycamore app</title>
-    <base href="/sycamore-test/">
+    <base href="/">
   
-<link rel="preload" href="/sycamore-test/sickamore-71acc08952df9c95_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/sycamore-test/sickamore-71acc08952df9c95.js"></head>
+<link rel="preload" href="/sickamore-65920339a4aabf85_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/sickamore-65920339a4aabf85.js"></head>
   <body>
 
 
-<script type="module">import init from '/sycamore-test/sickamore-71acc08952df9c95.js';init('/sycamore-test/sickamore-71acc08952df9c95_bg.wasm');</script></body></html>
+<script type="module">import init from '/sickamore-65920339a4aabf85.js';init('/sickamore-65920339a4aabf85_bg.wasm');</script><script>(function () {
+    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    var url = protocol + '//' + window.location.host + '/_trunk/ws';
+    var poll_interval = 5000;
+    var reload_upon_connect = () => {
+        window.setTimeout(
+            () => {
+                // when we successfully reconnect, we'll force a
+                // reload (since we presumably lost connection to
+                // trunk due to it being killed, so it will have
+                // rebuilt on restart)
+                var ws = new WebSocket(url);
+                ws.onopen = () => window.location.reload();
+                ws.onclose = reload_upon_connect;
+            },
+            poll_interval);
+    };
+
+    var ws = new WebSocket(url);
+    ws.onmessage = (ev) => {
+        const msg = JSON.parse(ev.data);
+        if (msg.reload) {
+            window.location.reload();
+        }
+    };
+    ws.onclose = reload_upon_connect;
+})()
+</script></body></html>

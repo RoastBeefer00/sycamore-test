@@ -3,7 +3,7 @@ use uuid::Uuid;
 use crate::recipes::AppState;
 use serde::{Serialize, Deserialize};
 
-#[derive(Props, Clone, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Recipe {
     pub name: String,
     pub time: String,
@@ -26,25 +26,25 @@ impl RecipeNoId {
     }
 }
 
-#[component]
-pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
+#[component(inline_props)]
+pub fn RecipeCard<G: Html> (cx: Scope, recipe: RcSignal<Recipe>) -> View<G> {
     let app_state = use_context::<AppState>(cx);
-    let ingredients = create_signal(cx, recipe.ingredients);
-    let steps = create_signal(cx, recipe.steps);
+    let recipe = create_ref(cx, recipe);
+    let ingredients = create_signal(cx, recipe.get().ingredients.clone());
+    let steps = create_signal(cx, recipe.get().steps.clone());
 
-    create_effect(cx, || println!("Something changed {:?}", app_state.recipes.get()));
-    let remove_recipe = move |_| app_state.remove_recipe(recipe.id);
+    let remove_recipe = move |_| app_state.remove_recipe(recipe.get().id);
 
     view! {cx,
         div(class="rounded my-3 mx-auto lg:w-2/3 w-11/12 border-2 border-indigo-700 shadow") {
             // name
             div(class="rounded-t w-full p-3 bg-indigo-900 border-b-2 border-b-indigo-700") {
                 p(class="text-2xl text-white") {
-                    (recipe.name)
+                    (recipe.get().name)
                 }
                 // time
                 p(class="text-white") {
-                    (recipe.time)
+                    (recipe.get().time)
                 }
                 button(class="rounded bg-red-700 text-white", on:click=remove_recipe) {
                     "Remove"
