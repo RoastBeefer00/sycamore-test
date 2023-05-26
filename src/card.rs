@@ -46,7 +46,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                 p(class="text-white") {
                     (recipe.time)
                 }
-                button(class="rounded bg-red-700 text-white", on:click=remove_recipe) {
+                button(class="rounded bg-red-700 text-white p-2", on:click=remove_recipe) {
                     "Remove"
                 }
             }
