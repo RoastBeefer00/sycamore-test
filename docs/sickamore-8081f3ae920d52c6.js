@@ -371,11 +371,6 @@ imports.wbg.__wbg_body_db30cc67afcfce41 = function(arg0) {
     const ret = getObject(arg0).body;
     return isLikeNone(ret) ? 0 : addHeapObject(ret);
 };
-imports.wbg.__wbg_createComment_27f6bb41bdc875ab = function(arg0, arg1, arg2) {
-    var v0 = getCachedStringFromWasm0(arg1, arg2);
-    const ret = getObject(arg0).createComment(v0);
-    return addHeapObject(ret);
-};
 imports.wbg.__wbg_createElement_d975e66d06bc88da = function() { return handleError(function (arg0, arg1, arg2) {
     var v0 = getCachedStringFromWasm0(arg1, arg2);
     const ret = getObject(arg0).createElement(v0);
@@ -538,8 +533,8 @@ imports.wbg.__wbindgen_memory = function() {
     const ret = wasm.memory;
     return addHeapObject(ret);
 };
-imports.wbg.__wbindgen_closure_wrapper381 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 129, __wbg_adapter_26);
+imports.wbg.__wbindgen_closure_wrapper370 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 123, __wbg_adapter_26);
     return addHeapObject(ret);
 };
 
@@ -580,7 +575,7 @@ async function __wbg_init(input) {
     if (wasm !== undefined) return wasm;
 
     if (typeof input === 'undefined') {
-        input = new URL('sickamore-f897473d5681c0d2_bg.wasm', import.meta.url);
+        input = new URL('sickamore-8081f3ae920d52c6_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 
