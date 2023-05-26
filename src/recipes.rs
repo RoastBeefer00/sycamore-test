@@ -1,5 +1,4 @@
 use sycamore::prelude::*;
-use web_sys::KeyboardEvent;
 use crate::card::*;
 use uuid::Uuid;
 
@@ -13,7 +12,7 @@ pub struct AppState {
 pub fn Show_Recipes<G: Html>(cx: Scope) -> View<G> {
     let app_state = use_context::<AppState>(cx);
 
-    let recipes = create_signal(cx, app_state.recipes.get().as_ref().clone());
+    let recipes = create_memo(cx, || app_state.recipes.get().as_ref().clone());
 
     view! { cx,
         Keyed(
@@ -43,7 +42,7 @@ impl AppState {
             .into_iter()
             .filter(|recipe| recipe.name.to_lowercase().contains(search.to_lowercase().as_str()))
             .collect();
-        self.recipes.set(to_add);
+        self.recipes.set([self.recipes.get().as_ref().clone(), to_add].concat());
         self.recipes.modify().sort_by_key(|recipe| recipe.id);
         self.recipes.modify().dedup_by_key(|recipe| recipe.id)
     }

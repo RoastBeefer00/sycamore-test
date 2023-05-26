@@ -1,6 +1,3 @@
-use serde_json;
-use crate::card::RecipeNoId;
-
 pub static RECIPES: &str = "[
         {
             \"name\": \"Kimchi Sweet Potato Collard Wraps \",

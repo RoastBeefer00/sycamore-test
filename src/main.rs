@@ -28,6 +28,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     let handle_keyup = move |event: KeyboardEvent| {
         if event.key() == "Enter" {
             app_state.add_from_search(&search.get().as_ref().clone());
+            search.modify().clear();
         }
     };
 
