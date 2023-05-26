@@ -32,7 +32,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
     let ingredients = create_signal(cx, recipe.ingredients);
     let steps = create_signal(cx, recipe.steps);
 
-    create_effect(cx, || println!("Something changed {:?}", app_state.recipes.get()));
+    // create_effect(cx, || println!("Something changed {:?}", app_state.recipes.get()));
     let remove_recipe = move |_| app_state.remove_recipe(recipe.id);
 
     view! {cx,

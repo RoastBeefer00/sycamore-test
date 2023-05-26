@@ -43,7 +43,6 @@ fn App<G: Html>(cx: Scope) -> View<G> {
            .map(|recipe| recipe.add_id())
            .collect());
 
-    app_state.recipes.track();
     let recipes_empty = create_selector(cx, || app_state.recipes.get().is_empty());
     view! { cx,
         Nav {}
