@@ -15,6 +15,9 @@ use db::RECIPES;
 mod recipes;
 use recipes::*;
 
+mod sidebar;
+use sidebar::*;
+
 #[component]
 fn App<G: Html>(cx: Scope) -> View<G> {
     // Initialize AppState
@@ -24,7 +27,6 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     };
     let app_state = provide_context(cx, app_state);
     let search = create_signal(cx, String::new());
-
 
     // Add recipes to database
     let json = serde_json::from_str(RECIPES);
@@ -43,18 +45,15 @@ fn App<G: Html>(cx: Scope) -> View<G> {
             search.set("".to_string());
         }
     };
-    let remove_all_recipes = move |_| app_state.remove_all_recipes();
     view! { cx,
-        Nav {}
-        div(class="flex mx-auto my-3 lg:w-2/3 w-4/5") {
-            input(class="flex-initial w-full shadow rounded appearance-none border-8 border-indigo-700 p-2", type="search", placeholder="Press 'Enter' to search...", bind:value=search, on:keyup=handle_keyup)
-        }
-        div(class="flex mx-auto my-3 lg:w-2/3 w-4/5") {
-            button(class="rounded bg-red-600 text-white p-2", on:click=remove_all_recipes) {
-                "Remove All"
+        // Nav {}
+        Sidebar {}
+        div(class="p-4 sm:ml-64 mt-16 sm:mt-28") {
+            div(class="flex mx-auto my-3 lg:w-2/3 w-4/5") {
+                input(class="flex-initial w-full shadow rounded appearance-none border-8 border-indigo-700 p-2", type="search", placeholder="Press 'Enter' to search...", bind:value=search, on:keyup=handle_keyup)
             }
+            Show_Recipes {}
         }
-        Show_Recipes {}
     }
 }
 

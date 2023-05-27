@@ -16,13 +16,15 @@ pub fn Show_Recipes<G: Html>(cx: Scope) -> View<G> {
     // let recipes = create_signal(cx, app_state.recipes.get().as_ref().clone());
     // let recipes = create_selector(cx, || app_state.recipes.get());
     view! { cx,
-        Keyed(
-            iterable=recipes,
-            view=|cx, recipe| view! { cx,
+        // div(class="p-4 sm:ml-64") {
+            Keyed(
+                iterable=recipes,
+                view=|cx, recipe| view! { cx,
                 RecipeCard(name=recipe.name, time=recipe.time, ingredients=recipe.ingredients, steps=recipe.steps, id=recipe.id)
-            },
-            key=|recipe| recipe.id,
-        )
+                },
+                key=|recipe| recipe.id,
+            )
+        // }
     }
 }
 
@@ -47,8 +49,8 @@ impl AppState {
             self.recipes.modify().push(recipe.clone());
         } */
         to_add = [self.recipes.get().as_ref().clone(), to_add].concat();
-        to_add.sort_by_key(|recipe| recipe.id);
-        to_add.dedup_by_key(|recipe| recipe.id);
+        // to_add.sort_by_key(|recipe| recipe.id);
+        // to_add.dedup_by_key(|recipe| recipe.id);
         self.recipes.set(to_add)
     }
 }

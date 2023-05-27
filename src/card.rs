@@ -32,8 +32,11 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
     let ingredients = create_signal(cx, recipe.ingredients);
     let steps = create_signal(cx, recipe.steps);
 
+    let body_visible = create_signal(cx, false);
+
     // create_effect(cx, || println!("Something changed {:?}", app_state.recipes.get()));
     let remove_recipe = move |_| app_state.remove_recipe(recipe.id);
+    let toggle_body_visible = |_| body_visible.set(!body_visible.get().as_ref().clone());
 
     view! {cx,
         div(class="rounded my-3 mx-auto lg:w-2/3 w-11/12 border-2 border-indigo-700 shadow") {
@@ -46,34 +49,53 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                 p(class="text-white") {
                     (recipe.time)
                 }
-                button(class="rounded bg-red-700 text-white p-2", on:click=remove_recipe) {
+                (if *body_visible.get() {
+                    view! { cx,
+                        button(class="rounded bg-slate-700 text-white p-2", on:click=toggle_body_visible) {
+                            "Hide"
+                        }
+                    }
+                } else {
+                    view! { cx, 
+                        button(class="rounded bg-slate-700 text-white p-2", on:click=toggle_body_visible) {
+                            "Show"
+                        }
+                    }
+                })
+                button(class="rounded bg-red-900 text-white p-2 float-right", on:click=remove_recipe) {
                     "Remove"
                 }
             }
-            // ingredients
-            div(class="border-b border-l border-r p-5 bg-gray-300") {
-                "Ingredients:"
-                ul(class="list-disc m-2") {
-                   Indexed(
-                        iterable=ingredients,
-                        view=|cx, ingredient| view! { cx,
-                        li { (ingredient) }    
-                        },
-                    ) 
+            (if *body_visible.get() {
+                // ingredients
+                view! { cx, 
+                    div(class="border-b border-l border-r p-5 bg-gray-300") {
+                        "Ingredients:"
+                            ul(class="list-disc m-2") {
+                                Indexed(
+                                    iterable=ingredients,
+                                    view=|cx, ingredient| view! { cx,
+                                    li { (ingredient) }    
+                                    },
+                                    ) 
+                            }
+                    }
+                    // steps
+                    div(class="rounded-b border-b border-l border-r p-5 bg-gray-300") {
+                        "Steps:"
+                            ul(class="list-decimal m-2") {
+                                Indexed(
+                                    iterable=steps,
+                                    view=|cx, step| view! { cx,
+                                    li { (step) }    
+                                    },
+                                    )  
+                            }
+                    }
                 }
-            }
-            // steps
-            div(class="rounded-b border-b border-l border-r p-5 bg-gray-300") {
-                "Steps:"
-                ul(class="list-decimal m-2") {
-                   Indexed(
-                        iterable=steps,
-                        view=|cx, step| view! { cx,
-                        li { (step) }    
-                        },
-                    )  
-                }
-            }
+            } else {
+                view! { cx, }
+            })
         }
     }
 }
