@@ -36,6 +36,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
 
     // create_effect(cx, || println!("Something changed {:?}", app_state.recipes.get()));
     let remove_recipe = move |_| app_state.remove_recipe(recipe.id);
+    let replace_recipe = move |_| app_state.replace_recipe(recipe.id);
     let toggle_body_visible = |_| body_visible.set(!body_visible.get().as_ref().clone());
 
     view! {cx,
@@ -51,19 +52,22 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                 }
                 (if *body_visible.get() {
                     view! { cx,
-                        button(class="rounded bg-slate-700 text-white p-2", on:click=toggle_body_visible) {
+                        button(class="rounded bg-slate-700 text-white p-2 mt-2", on:click=toggle_body_visible) {
                             "Hide"
                         }
                     }
                 } else {
                     view! { cx, 
-                        button(class="rounded bg-slate-700 text-white p-2", on:click=toggle_body_visible) {
+                        button(class="rounded bg-slate-700 text-white p-2 mt-2", on:click=toggle_body_visible) {
                             "Show"
                         }
                     }
                 })
-                button(class="rounded bg-red-900 text-white p-2 float-right", on:click=remove_recipe) {
+                button(class="rounded bg-red-900 text-white p-2 mx-2 mt-2 float-right", on:click=remove_recipe) {
                     "Remove"
+                }
+                button(class="rounded bg-slate-700 text-white p-2 mt-2 float-right", on:click=replace_recipe) {
+                    "Replace"
                 }
             }
             (if *body_visible.get() {

@@ -1,4 +1,5 @@
 use sycamore::prelude::*;
+use rand::Rng;
 use crate::card::*;
 use uuid::Uuid;
 
@@ -29,6 +30,21 @@ pub fn Show_Recipes<G: Html>(cx: Scope) -> View<G> {
 }
 
 impl AppState {
+    pub fn replace_recipe(&self, id: Uuid) {
+        let index = self.recipes.modify().iter().position(|recipe| recipe.id == id).unwrap();
+        self.recipes.modify().insert(index, self.get_random_recipe());
+        self.remove_recipe(id)
+    }
+
+    pub fn get_random_recipe(&self) -> Recipe {
+        let mut rng = rand::thread_rng();
+        let db_len = self.db.get().as_ref().clone().len() -1;
+        let random_index = rng.gen_range(0..db_len);
+        let random_recipe = self.db.get().as_ref().clone()[random_index].clone();
+
+        random_recipe
+    }
+
     pub fn remove_recipe(&self, id: Uuid) {
         self.recipes.modify().retain(|recipe| recipe.id != id)
     }

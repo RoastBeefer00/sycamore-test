@@ -226,6 +226,7 @@ name = "sickamore"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
+ "rand",
  "serde",
  "serde_json",
  "sycamore",

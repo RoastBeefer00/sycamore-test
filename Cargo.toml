@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 console_error_panic_hook = "0.1.7"
+rand = "0.8.5"
 serde = { version = "1.0.163", features = ["derive"] }
 serde_json = "1.0.96"
 sycamore = "0.9.0-beta.1"
