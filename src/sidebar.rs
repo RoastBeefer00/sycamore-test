@@ -6,8 +6,8 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
     let app_state = use_context::<AppState>(cx);   
     let sidebar_class = create_signal(cx, String::new());
     let sidebar_open = create_signal(cx, false);
-    let sidebar_class_closed="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -trangray-x-full sm:translate-x-0";
-    let sidebar_class_open="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -trangray-x-0 sm:translate-x-0";
+    let sidebar_class_closed="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -translate-x-full sm:translate-x-0";
+    let sidebar_class_open="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -translate-x-0 sm:translate-x-0";
 
     sidebar_class.set(sidebar_class_closed.to_string());
 
@@ -22,7 +22,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
     };
     let remove_all_recipes = move |_| app_state.remove_all_recipes();
     view! { cx,
-        nav(class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-indigo-700") {
+        nav(class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-slate-800 dark:border-indigo-700") {
           div(class="px-3 py-3 lg:px-5 lg:pl-3") { 
             div(class="flex items-center justify-between") {
               div(class="flex items-center justify-start sm:justify-center w-full") {
@@ -43,7 +43,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
         }
 
         aside (id="separator-sidebar", class=(sidebar_class.get()), aria-label="Sidebar") {
-            div (class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 border-r border-r-indigo-700") {
+            div (class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-slate-800 border-r border-r-indigo-700") {
                 ul (class="pt-4 mt-4 space-y-2 font-medium") {
                     li {
                         a (href="#", on:click=remove_all_recipes, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-red-900 sm:bg-transparent hover:bg-red-900 group") {
