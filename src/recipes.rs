@@ -71,7 +71,18 @@ pub fn Show_Recipes<G: Html>(cx: Scope) -> View<G> {
     let recipes = create_memo(cx, || app_state.recipes
                               .get()
                               .iter()
-                              .filter(|_| true)
+                              .filter(|recipe| {
+                                let time_string = String::from(recipe.time.get(0..3).unwrap());
+                                let recipe_time = match time_string.trim().parse::<i32>() {
+                                    Ok(time) => time,
+                                    Err(err) => panic!("Something went wrong converting {}: {}", time_string, err),
+                                };
+                                let max_time = match app_state.maxTime.get().as_ref().clone().parse::<i32>() {
+                                    Ok(time) => time,
+                                    Err(err) => panic!("Something went wrong converting {}: {}", app_state.maxTime.get().as_ref().clone(), err),
+                                };
+                                recipe_time <= max_time
+                              })
                               .cloned()
                               .collect::<Vec<_>>());
     view! { cx,
