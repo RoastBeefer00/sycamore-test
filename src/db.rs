@@ -5302,7 +5302,12 @@ pub static RECIPES: &str = "[
             \"time\": \"30 min\",
             \"ingredients\": [\"1 package extra firm tofu\", \"1 can coconut milk\", \".25 cup Thai green curry paste\", \"1.5 tablespoons brown sugar\", \"1 bunch asparagus spears\", \"1 lime\", \"2 scallions\", \".25 cup fresh cilantro\", \"1 tablespoon vegetable oil*\", \"2 cups brown rice\", \"4 cups water*\"],
             \"steps\": [\"Prep: Rinse and dry the produce. Chop the scallions and cilantro, cut the lime in half, and cut asparagus spears into 1 inch pieces. Drain tofu, cut into 1 inch cubes, wrap in paper towel and press firmly to get rid of moisture. Open the coconut milk and set aside.\", \"Pour brown rice into a medium pot. Add 4 cups of water, and bring to a boil. Reduce heat to low, cover and let simmer until rice is completely cooked, about 25-30 minutes. \", \"Coat a large saute pan with 1 tablespoon vegetable oil over medium heat. Add tofu cubes in a single layer and cook until slightly browned on bottom, about 5 minutes. Using a spatula, flip the tofu to brown the other sides, for another 5 minutes. Transfer tofu to a plate and set aside. \", \"Using the same pan, add the coconut milk, curry paste and brown sugar.  Stir and bring to a simmer.\", \"Add the asparagus to the coconut broth and continue to simmer for 2 minutes. Then add the tofu cubes and stir to incorporate. \", \"To serve, add the brown rice to bowls and top with tofu curry mix. Garnish with cilantro, scallions and a squeeze of lime. \"]
+        },
+        {
+            \"name\": \"Biscuits and Gravy\",
+            \"time\": \"30 min\",
+            \"ingredients\": [\"1 package of biscuits\", \"1.33 cups all purpose flour\", \"3 cups unsweetened cashew milk\", \"14 oz sausage crumbles\", \"1 tbsp butter\", \".8 tsp dried thyme\", \".8 tsp dried crushed rosemary\", \".8 tsp crushed red pepper flakes\", \"1 tsp salt\", \".5 tsp ground black pepper\"],
+            \"steps\": [\"In a large pan over medium-high heat, cook the vegan sausage.\", \"Now add the flour, cashew milk and vegan butter. Cook on medium heat for 5-10 minutes, stirring constantly, until the gravy thickens.\", \"Add the thyme, rosemary, red pepper flakes, salt and pepper. Taste the gravy and add any additional seasonings, salt or pepper, as desired.\", \"Serve immediately over warm biscuits and enjoy!\"]
         }
 ]";
 
-// pub const RECIPES_NO_ID: Vec<RecipeNoId> = serde_json::from_str(RECIPES).unwrap();
