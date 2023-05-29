@@ -1,5 +1,5 @@
 use sycamore::prelude::*;
-use crate::recipes::AppState;
+use crate::recipes::*;
 
 #[component]
 pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
@@ -22,7 +22,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
     };
     let remove_all_recipes = move |_| app_state.remove_all_recipes();
     view! { cx,
-        nav(class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-slate-800 dark:border-indigo-700") {
+        nav(class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-indigo-700") {
           div(class="px-3 py-3 lg:px-5 lg:pl-3") { 
             div(class="flex items-center justify-between") {
               div(class="flex items-center justify-start sm:justify-center w-full") {
@@ -43,7 +43,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
         }
 
         aside (id="separator-sidebar", class=(sidebar_class.get()), aria-label="Sidebar") {
-            div (class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-slate-800 border-r border-r-indigo-700") {
+            div (class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 border-r border-r-indigo-700") {
                 ul (class="pt-4 mt-4 space-y-2 font-medium") {
                     li {
                         a (href="#", on:click=remove_all_recipes, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-red-900 sm:bg-transparent hover:bg-red-900 group") {
@@ -51,6 +51,16 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                                 "Remove All"
                             }
                         }
+                    }
+                    li {
+                        label(for="countries", class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") {
+                            "Search by:"
+                        }
+                        select(id="countries", class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500") {
+                            RecipeFilter(filter=Filter::Title)
+                            RecipeFilter(filter=Filter::Ingredients)
+                        }
+
                     }
                 }
             }

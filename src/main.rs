@@ -24,6 +24,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     let app_state = AppState {
         recipes: create_rc_signal(Vec::new()),
         db: create_rc_signal(Vec::new()),
+        filter: create_rc_signal(Filter::Title),
     };
     let app_state = provide_context(cx, app_state);
     let search = create_signal(cx, String::new());

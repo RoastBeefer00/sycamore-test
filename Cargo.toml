@@ -12,5 +12,8 @@ serde = { version = "1.0.163", features = ["derive"] }
 serde_json = "1.0.96"
 sycamore = "0.9.0-beta.1"
 uuid = { version = "1.3.3", features = ["serde", "v4"]}
-web-sys = { version = "0.3.63", features = ["HtmlInputElement", "KeyboardEvent"]}
+# web-sys = { version = "0.3.63", features = ["HtmlInputElement", "KeyboardEvent"]}
 
+[dependencies.web-sys]
+features = ["InputEvent", "KeyboardEvent", "Location", "Storage"]
+version = "0.3.60"

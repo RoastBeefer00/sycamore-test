@@ -34,7 +34,6 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
 
     let body_visible = create_signal(cx, false);
 
-    // create_effect(cx, || println!("Something changed {:?}", app_state.recipes.get()));
     let remove_recipe = move |_| app_state.remove_recipe(recipe.id);
     let replace_recipe = move |_| app_state.replace_recipe(recipe.id);
     let toggle_body_visible = |_| body_visible.set(!body_visible.get().as_ref().clone());
