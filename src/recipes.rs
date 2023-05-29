@@ -20,6 +20,7 @@ pub struct AppState {
     pub db: RcSignal<Vec<Recipe>>,
     pub recipes: RcSignal<Vec<Recipe>>,
     pub filter: RcSignal<Filter>,
+    pub maxTime: RcSignal<String>,
 }
 
 impl AppState {

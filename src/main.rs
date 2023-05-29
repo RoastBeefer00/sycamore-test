@@ -25,6 +25,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
         recipes: create_rc_signal(Vec::new()),
         db: create_rc_signal(Vec::new()),
         filter: create_rc_signal(Filter::Title),
+        maxTime: create_rc_signal(String::from("55")),
     };
     let app_state = provide_context(cx, app_state);
     let search = create_signal(cx, String::new());

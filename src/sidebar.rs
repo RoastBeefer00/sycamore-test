@@ -11,6 +11,24 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
 
     sidebar_class.set(sidebar_class_closed.to_string());
 
+    /* let times_slice = app_state.db
+        .get()
+        .iter()
+        .map(|recipe| recipe.time.to_lowercase().replace(" min", ""))
+        .collect::<Vec<_>>();
+
+    panic!("{:?}", times_slice); */
+
+    let all_times = app_state.db
+        .get()
+        .iter()
+        .map(|recipe| recipe.time.to_lowercase().replace(" min", ""))
+        .collect::<Vec<_>>();
+    let min_time = all_times.iter().min().unwrap().clone();
+    let max_time = all_times.iter().max().unwrap().clone();
+    let slider_value = create_signal(cx, max_time.clone());
+    let update_time_state = move |_| app_state.maxTime.set(slider_value.get().as_ref().clone()); 
+
     let toggle_sidebar = move |_| {
         if sidebar_open.get().as_ref().clone() {
             sidebar_class.set(sidebar_class_closed.to_string());
@@ -60,11 +78,17 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                         label(for="filters", class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") {
                             "Search by:"
                         }
-                        select(id="filters", on:change=toggle_filter ,class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500") {
+                        select(id="filters", on:change=toggle_filter, class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-700 focus:border-indigo-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-700 dark:focus:border-indigo-700") {
                             RecipeFilter(filter=Filter::Title)
                             RecipeFilter(filter=Filter::Ingredients)
                         }
 
+                    }
+                    li {
+                        label(for="steps-range", class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") {
+                            "Max time: " (slider_value.get()) " minutes"
+                        }
+                        input(id="steps-range", type="range", on:change=update_time_state, bind:value=slider_value, min=min_time, max=max_time, value="30", step="5", class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700") {}
                     }
                 }
             }
