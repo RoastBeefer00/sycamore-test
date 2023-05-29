@@ -93,7 +93,7 @@ pub fn RecipeFilter<G: Html>(cx: Scope, filter: Filter) -> View<G> {
     view! { cx,
         option(
             class=if selected() { "selected" } else { "" },
-            on:click=move |_| set_filter(filter),
+            // on:change=move |_| set_filter(filter),
             ) {
             (format!("{filter:?}"))
         }

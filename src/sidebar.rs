@@ -21,6 +21,10 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
         }
     };
     let remove_all_recipes = move |_| app_state.remove_all_recipes();
+    let toggle_filter = move |_| match *app_state.filter.get() {
+        Filter::Title => app_state.filter.set(Filter::Ingredients),
+        Filter::Ingredients => app_state.filter.set(Filter::Title),
+    };
     view! { cx,
         nav(class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-indigo-700") {
           div(class="px-3 py-3 lg:px-5 lg:pl-3") { 
@@ -53,10 +57,10 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                         }
                     }
                     li {
-                        label(for="countries", class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") {
+                        label(for="filters", class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") {
                             "Search by:"
                         }
-                        select(id="countries", class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500") {
+                        select(id="filters", on:change=toggle_filter ,class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500") {
                             RecipeFilter(filter=Filter::Title)
                             RecipeFilter(filter=Filter::Ingredients)
                         }
