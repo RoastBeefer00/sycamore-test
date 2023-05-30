@@ -38,6 +38,9 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
             sidebar_open.set(true);
         }
     };
+
+    let toggle_modal = move |_| app_state.toggle_modal();
+
     let remove_all_recipes = move |_| app_state.remove_all_recipes();
     let toggle_filter = move |_| match *app_state.filter.get() {
         Filter::Title => app_state.filter.set(Filter::Ingredients),
@@ -56,7 +59,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                           path (clip-rule="evenodd", fill-rule="evenodd", d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z") {}
                       }
                   }
-                  h1(class="text-indigo-700 lg:text-7xl text-4xl m-2 border-b border-b-indigo-700 text-center") {
+                  h1(class="text-indigo-700 lg:text-7xl text-4xl m-2 border-b border-b-indigo-700 text-center font-extrabold") {
                       "R&J Meals"
                   }
               }
@@ -67,6 +70,13 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
         aside (id="separator-sidebar", class=(sidebar_class.get()), aria-label="Sidebar") {
             div (class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 border-r border-r-indigo-700") {
                 ul (class="pt-4 mt-4 space-y-2 font-medium") {
+                    li {
+                        // Modal toggle
+                        a (href="#", on:click=toggle_modal, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-indigo-700 sm:bg-transparent hover:bg-indigo-700 group") { span (class="ml-4") {
+                                "Grocery List"
+                            }
+                        }
+                    }
                     li {
                         a (href="#", on:click=remove_all_recipes, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-red-900 sm:bg-transparent hover:bg-red-900 group") {
                             span (class="ml-4") {
