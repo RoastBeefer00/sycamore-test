@@ -2,7 +2,7 @@ use sycamore::prelude::*;
 use crate::recipes::AppState;
 use regex::Regex;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Ingredient {
     pub quantity: String,
     pub measurement: String,
@@ -55,43 +55,63 @@ pub fn get_ingredient_item(ingredient: String) -> String {
 
 pub fn combine_ingredients(ingredients: Vec<Ingredient>) -> Vec<Ingredient> {
     let mut ingredients = ingredients.clone();
-    let mut i = 0;
-    let mut max = ingredients.len() - 2;
-    while i < max {
-       let mut j = i + 1; 
-       let ingredient_i = ingredients.get(i).unwrap();
-       let ingredient_j = ingredients.get(j).unwrap();
-       if ingredient_i.item.contains(ingredient_j.item.as_str()) || ingredient_j.item.contains(ingredient_i.item.as_str()) {
-            if ingredient_i.measurement.contains(ingredient_j.measurement.as_str()) || ingredient_j.measurement.contains(ingredient_i.measurement.as_str()) {
-                if ingredient_i.quantity != String::from("") {
-                    if ingredient_i.item.len() > ingredient_j.item.len() {
-                        ingredient_i.item = ingredient_j.item;
-                    }
+    if ingredients.len() > 2 {
 
-                    if ingredient_i.measurement.len() > ingredient_j.measurement.len() {
-                        ingredient_i.measurement = ingredient_j.measurement;
-                    }
+        ingredients.sort_by_key(|ingredient| ingredient.item.clone());
+        let mut i = 0;
+        let mut max = ingredients.len() - 2;
+        while i < max {
+            let j = i + 1; 
+            let ingredient_i = ingredients.get(i).unwrap();
+            let ingredient_j = ingredients.get(j).unwrap();
+            if ingredient_i.item.contains(ingredient_j.item.as_str()) || ingredient_j.item.contains(ingredient_i.item.as_str()) {
+                if ingredient_i.measurement.contains(ingredient_j.measurement.as_str()) || ingredient_j.measurement.contains(ingredient_i.measurement.as_str()) {
+                    let mut insert = Ingredient {
+                        quantity: String::from(""),
+                        measurement: String::from(""),
+                        item: String::from(""),
+                    }; 
+                    if ingredient_i.quantity != String::from("") {
+                        if ingredient_i.item.len() > ingredient_j.item.len() {
+                            insert.item = ingredient_j.item.clone();
+                        } else {
+                            insert.item = ingredient_i.item.clone();
+                        }
 
-                    if ingredient_i.quantity.contains(".") || ingredient_j.quantity.contains(".") {
-                        let float_i = ingredient_i.quantity.parse::<f32>().unwrap();
-                        let float_j = ingredient_j.quantity.parse::<f32>().unwrap();
-                        let added = float_i + float_j;
-                        ingredient_i.quantity = added.to_string();
-                    } else {
-                        let int_i = ingredient_i.quantity.parse::<i32>().unwrap();
-                        let int_j = ingredient_j.quantity.parse::<i32>().unwrap();
-                        let added = int_i + int_j;
-                        ingredient_i.quantity = added.to_string();
+                        if ingredient_i.measurement.len() > ingredient_j.measurement.len() {
+                            insert.measurement = ingredient_j.measurement.clone();
+                        } else {
+                            insert.measurement = ingredient_i.measurement.clone();
+                        }
+
+
+                        if ingredient_i.quantity.contains(".") || ingredient_j.quantity.contains(".") {
+                            let float_i = ingredient_i.quantity.parse::<f32>().unwrap();
+                            let float_j = ingredient_j.quantity.parse::<f32>().unwrap();
+                            let added = float_i + float_j;
+                            insert.quantity = added.to_string();
+                        } else {
+                            let int_i = ingredient_i.quantity.parse::<i32>().unwrap();
+                            let int_j = ingredient_j.quantity.parse::<i32>().unwrap();
+                            let added = int_i + int_j;
+                            insert.quantity = added.to_string();
+                        }
                     }
+                    ingredients.remove(j);
+                    if insert.item != String::from("") {
+                        ingredients.insert(j, insert);
+                        ingredients.remove(i);
+                    }
+                    i = i - 1;
+                    max = max - 1;
                 }
-                ingredients.remove(j);
-                i = i - 1;
-                max = max - 1;
-            }
-       } 
-       i = i + 1;
+            } 
+            i = i + 1;
+        }
+        ingredients
+    } else {
+        ingredients
     }
-    ingredients
 }
 
 #[component]
@@ -99,6 +119,12 @@ pub fn GroceriesModal<G: Html> (cx: Scope) -> View<G> {
     let app_state = use_context::<AppState>(cx);
 
     let ingredient_list = create_signal(cx, app_state.get_ingredients());
+
+    let combined_ingredients = create_memo(cx, || {
+        let mut combined = combine_ingredients(ingredient_list.get().as_ref().clone());
+        combined.sort_by_key(|ingredient| ingredient.item.clone());
+        combined
+    });
 
     let toggle_modal = move |_| app_state.toggle_modal();
     view! { cx,
@@ -129,11 +155,14 @@ pub fn GroceriesModal<G: Html> (cx: Scope) -> View<G> {
                             "The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them."
                         } */
                         Indexed(
-                            iterable=ingredient_list,
+                            iterable=combined_ingredients,
                             view=|cx, ingredient| view! { cx, 
-                                p(class="text-white") {
-                                    (ingredient.quantity) " " (ingredient.measurement) " " (ingredient.item)
+                                input(id="ingredient", type="checkbox") {
                                 }
+                                label(for="ingredient", class="text-white") {
+                                    " "(ingredient.quantity) " " (ingredient.measurement) " " (ingredient.item)
+                                }
+                                br {}
                             },
                         )
 

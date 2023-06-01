@@ -1,41 +1,14 @@
 <!DOCTYPE html><html class="bg-gray-700"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/tailwind-e163b307f587edd0.css">
+    <link rel="stylesheet" href="/sycamore-test/tailwind-c738f71b8d5fbf5b.css">
     <!-- <link data-trunk rel="copy-file" href="./recipes.json"/> -->
     <title>Magenta Carrot</title>
-    <base href="/">
+    <base href="/sycamore-test/">
   
-<link rel="preload" href="/sickamore-885b7024c4007f4_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/sickamore-885b7024c4007f4.js"></head>
+<link rel="preload" href="/sycamore-test/sickamore-43fae4386ff16859_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/sycamore-test/sickamore-43fae4386ff16859.js"></head>
   <body>
 
 
-<script type="module">import init from '/sickamore-885b7024c4007f4.js';init('/sickamore-885b7024c4007f4_bg.wasm');</script><script>(function () {
-    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    var url = protocol + '//' + window.location.host + '/_trunk/ws';
-    var poll_interval = 5000;
-    var reload_upon_connect = () => {
-        window.setTimeout(
-            () => {
-                // when we successfully reconnect, we'll force a
-                // reload (since we presumably lost connection to
-                // trunk due to it being killed, so it will have
-                // rebuilt on restart)
-                var ws = new WebSocket(url);
-                ws.onopen = () => window.location.reload();
-                ws.onclose = reload_upon_connect;
-            },
-            poll_interval);
-    };
-
-    var ws = new WebSocket(url);
-    ws.onmessage = (ev) => {
-        const msg = JSON.parse(ev.data);
-        if (msg.reload) {
-            window.location.reload();
-        }
-    };
-    ws.onclose = reload_upon_connect;
-})()
-</script></body></html>
+<script type="module">import init from '/sycamore-test/sickamore-43fae4386ff16859.js';init('/sycamore-test/sickamore-43fae4386ff16859_bg.wasm');</script></body></html>

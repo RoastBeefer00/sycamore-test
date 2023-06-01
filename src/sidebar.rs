@@ -6,6 +6,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
     let app_state = use_context::<AppState>(cx);   
     let sidebar_class = create_signal(cx, String::new());
     let sidebar_open = create_signal(cx, false);
+    let recipe_counter = create_signal(cx, String::new());
     let sidebar_class_closed="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -translate-x-full sm:translate-x-0";
     let sidebar_class_open="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -translate-x-0 sm:translate-x-0";
 
@@ -27,7 +28,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
     let min_time = all_times.iter().min().unwrap().clone();
     let max_time = all_times.iter().max().unwrap().clone();
     let slider_value = create_signal(cx, max_time.clone());
-    let update_time_state = move |_| app_state.maxTime.set(slider_value.get().as_ref().clone()); 
+    let update_time_state = move |_| app_state.maxTime.set(slider_value.get().as_ref().clone());
 
     let toggle_sidebar = move |_| {
         if sidebar_open.get().as_ref().clone() {
@@ -42,6 +43,13 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
     let toggle_modal = move |_| app_state.toggle_modal();
 
     let remove_all_recipes = move |_| app_state.remove_all_recipes();
+    let get_random_recipes = move |_| {
+        let amount = recipe_counter.get().as_ref().clone().parse::<i32>().unwrap();
+
+        for n in 1..=amount {
+            app_state.recipes.modify().push(app_state.get_random_recipe());
+        }
+    };
     let toggle_filter = move |_| match *app_state.filter.get() {
         Filter::Title => app_state.filter.set(Filter::Ingredients),
         Filter::Ingredients => app_state.filter.set(Filter::Title),
@@ -99,6 +107,15 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                             "Max time: " (slider_value.get()) " minutes"
                         }
                         input(id="steps-range", type="range", on:change=update_time_state, bind:value=slider_value, min=min_time, max=max_time, value="30", step="5", class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700") {}
+                    }
+                    li {
+                        label(for="exampleFormControlInputNumber", class="pointer-events-none mb-0 max-w-[90%] truncate pt-[0.37rem] leading-[1.6] text-white transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary") {
+                            "Add " (recipe_counter.get())  " random recipes:"
+                        }
+                        input(type="number", bind:value=recipe_counter, class="peer block min-h-[auto] w-full rounded border-0 bg-gray-700 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-white dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0", id="exampleFormControlInputNumber", placeholder="Example label") {}
+                        button(class="rounded bg-gray-700 text-white", on:click=get_random_recipes) {
+                            "Search"
+                        }
                     }
                 }
             }
