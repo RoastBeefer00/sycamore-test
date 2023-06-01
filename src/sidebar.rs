@@ -84,8 +84,8 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
         }
 
         aside (id="separator-sidebar", class=(sidebar_class.get()), aria-label="Sidebar") {
-            div (class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 border-r border-r-indigo-700") {
-                ul (class="pt-4 mt-4 space-y-2 font-medium") {
+            div (class="h-full px-3 sm:py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 border-r border-r-indigo-700") {
+                ul (class="pt-4 sm:mt-4 space-y-2 font-medium") {
                     li {
                         // Modal toggle
                         a (href="#", on:click=toggle_modal, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-indigo-700 sm:bg-transparent hover:bg-indigo-700 group") { span (class="ml-4") {
