@@ -18,6 +18,9 @@ use recipes::*;
 mod sidebar;
 use sidebar::*;
 
+mod groceries;
+use groceries::GroceriesModal;
+
 #[component]
 fn App<G: Html>(cx: Scope) -> View<G> {
     // Initialize AppState
@@ -26,6 +29,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
         db: create_rc_signal(Vec::new()),
         filter: create_rc_signal(Filter::Title),
         maxTime: create_rc_signal(String::from("55")),
+        modal: create_rc_signal(false),
     };
     let app_state = provide_context(cx, app_state);
     let search = create_signal(cx, String::new());
@@ -52,9 +56,17 @@ fn App<G: Html>(cx: Scope) -> View<G> {
         Sidebar {}
         div(class="p-4 sm:ml-64 mt-16 sm:mt-28") {
             div(class="flex mx-auto my-3 lg:w-2/3 w-4/5") {
-                input(class="flex-initial w-full shadow rounded appearance-none border-8 border-indigo-700 p-2", type="search", placeholder="Press 'Enter' to search...", bind:value=search, on:keyup=handle_keyup)
+                input(class="flex-initial w-full shadow rounded appearance-none border-8 border-indigo-700 p-2", type="search", placeholder="Press 'Enter' to search by...", bind:value=search, on:keyup=handle_keyup)
             }
             Show_Recipes {}
+            (if app_state.modal.get().as_ref().clone() {
+                view! { cx,
+                    GroceriesModal {}
+                }
+            } else {
+                view! { cx, 
+                }
+            })
         }
     }
 }

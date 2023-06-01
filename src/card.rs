@@ -42,7 +42,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
         div(class="rounded my-3 mx-auto lg:w-2/3 w-11/12 border-2 border-indigo-700 shadow") {
             // name
             div(class="rounded-t w-full p-3 bg-indigo-900 border-b-2 border-b-indigo-700") {
-                p(class="text-2xl text-white") {
+                p(class="text-2xl text-white font-bold") {
                     (recipe.name)
                 }
                 // time
@@ -73,27 +73,31 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                 // ingredients
                 view! { cx, 
                     div(class="border-b border-l border-r p-5 bg-gray-300") {
-                        "Ingredients:"
-                            ul(class="list-disc m-2") {
-                                Indexed(
-                                    iterable=ingredients,
-                                    view=|cx, ingredient| view! { cx,
+                        p(class="font-bold") {
+                            "Ingredients:"
+                        }
+                        ul(class="list-disc m-2") {
+                            Indexed(
+                                iterable=ingredients,
+                                view=|cx, ingredient| view! { cx,
                                     li { (ingredient) }    
-                                    },
-                                    ) 
-                            }
+                                },
+                            ) 
+                        }
                     }
                     // steps
                     div(class="rounded-b border-b border-l border-r p-5 bg-gray-300") {
-                        "Steps:"
-                            ul(class="list-decimal m-2") {
-                                Indexed(
-                                    iterable=steps,
-                                    view=|cx, step| view! { cx,
+                        p(class="font-bold") {
+                            "Steps:"
+                        }
+                        ul(class="list-decimal m-2") {
+                            Indexed(
+                                iterable=steps,
+                                view=|cx, step| view! { cx,
                                     li { (step) }    
-                                    },
-                                    )  
-                            }
+                                },
+                            )  
+                        }
                     }
                 }
             } else {

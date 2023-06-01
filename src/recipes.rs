@@ -1,7 +1,9 @@
 use sycamore::prelude::*;
 use rand::Rng;
-use crate::card::*;
+use crate::{card::*, groceries::{get_ingredient_quantity, get_ingredient_measurement, get_ingredient_item}};
 use uuid::Uuid;
+use std::fmt;
+use crate::groceries::Ingredient;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Filter {
@@ -15,12 +17,22 @@ impl Default for Filter {
     }
 }
 
+impl fmt::Display for Filter {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Filter::Title => write!(f, "Title"),
+            Filter::Ingredients => write!(f, "Ingredients"),
+        }
+    }
+}
+
 #[derive(Clone, PartialEq, Eq)]
 pub struct AppState {
     pub db: RcSignal<Vec<Recipe>>,
     pub recipes: RcSignal<Vec<Recipe>>,
     pub filter: RcSignal<Filter>,
     pub maxTime: RcSignal<String>,
+    pub modal: RcSignal<bool>,
 }
 
 impl AppState {
@@ -32,9 +44,21 @@ impl AppState {
 
     pub fn get_random_recipe(&self) -> Recipe {
         let mut rng = rand::thread_rng();
-        let db_len = self.db.get().as_ref().clone().len() -1;
+        let max_time = self.maxTime.get().as_ref().clone().parse::<i32>().unwrap();
+        let db: Vec<Recipe> = self.db.get().as_ref().clone()
+            .into_iter()
+            .filter(|recipe| {
+                let time_string = String::from(recipe.time.get(0..3).unwrap());
+                let recipe_time = match time_string.trim().parse::<i32>() {
+                    Ok(time) => time,
+                    Err(err) => panic!("Something went wrong converting {}: {}", time_string, err),
+                };
+                recipe_time <= max_time
+            })
+            .collect::<Vec<_>>();
+        let db_len = db.len() -1;
         let random_index = rng.gen_range(0..db_len);
-        let random_recipe = self.db.get().as_ref().clone()[random_index].clone();
+        let random_recipe = db[random_index].clone();
 
         random_recipe
     }
@@ -61,6 +85,25 @@ impl AppState {
 
         to_add = [self.recipes.get().as_ref().clone(), to_add].concat();
         self.recipes.set(to_add)
+    }
+
+    pub fn toggle_modal(&self) {
+        self.modal.set(!*self.modal.get())
+    }
+
+    pub fn get_ingredients(&self) -> Vec<Ingredient> {
+        let mut ingredients = Vec::new();
+        for recipe in self.recipes.get().as_ref().clone().iter() {
+            for ingredient in recipe.ingredients.iter() {
+                ingredients.push(Ingredient {
+                    quantity: get_ingredient_quantity(ingredient.clone()),
+                    measurement: get_ingredient_measurement(ingredient.clone()),
+                    item: get_ingredient_item(ingredient.clone()),
+                });
+            }
+        }
+
+        ingredients
     }
 }
 
@@ -100,14 +143,13 @@ pub fn Show_Recipes<G: Html>(cx: Scope) -> View<G> {
 pub fn RecipeFilter<G: Html>(cx: Scope, filter: Filter) -> View<G> {
     let app_state = use_context::<AppState>(cx);
     let selected = move || filter == *app_state.filter.get();
-    let set_filter = |filter| app_state.filter.set(filter);
+    // let set_filter = |filter| app_state.filter.set(filter);
 
     view! { cx,
         option(
             class=if selected() { "selected" } else { "" },
-            // on:change=move |_| set_filter(filter),
             ) {
-            (format!("{filter:?}"))
+            (filter.to_string())
         }
     }
 }
