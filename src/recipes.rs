@@ -44,9 +44,21 @@ impl AppState {
 
     pub fn get_random_recipe(&self) -> Recipe {
         let mut rng = rand::thread_rng();
-        let db_len = self.db.get().as_ref().clone().len() -1;
+        let max_time = self.maxTime.get().as_ref().clone().parse::<i32>().unwrap();
+        let db: Vec<Recipe> = self.db.get().as_ref().clone()
+            .into_iter()
+            .filter(|recipe| {
+                let time_string = String::from(recipe.time.get(0..3).unwrap());
+                let recipe_time = match time_string.trim().parse::<i32>() {
+                    Ok(time) => time,
+                    Err(err) => panic!("Something went wrong converting {}: {}", time_string, err),
+                };
+                recipe_time <= max_time
+            })
+            .collect::<Vec<_>>();
+        let db_len = db.len() -1;
         let random_index = rng.gen_range(0..db_len);
-        let random_recipe = self.db.get().as_ref().clone()[random_index].clone();
+        let random_recipe = db[random_index].clone();
 
         random_recipe
     }

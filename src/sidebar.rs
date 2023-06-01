@@ -1,5 +1,6 @@
 use sycamore::prelude::*;
 use crate::recipes::*;
+use web_sys::KeyboardEvent;
 
 #[component]
 pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
@@ -44,15 +45,22 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
 
     let remove_all_recipes = move |_| app_state.remove_all_recipes();
     let get_random_recipes = move |_| {
-        let amount = recipe_counter.get().as_ref().clone().parse::<i32>().unwrap();
+        if recipe_counter.get().as_ref().clone() != String::new() {
+            let amount = recipe_counter.get().as_ref().clone().parse::<i32>().unwrap();
 
-        for n in 1..=amount {
-            app_state.recipes.modify().push(app_state.get_random_recipe());
+            for n in 1..=amount {
+                app_state.recipes.modify().push(app_state.get_random_recipe());
+            }
         }
     };
     let toggle_filter = move |_| match *app_state.filter.get() {
         Filter::Title => app_state.filter.set(Filter::Ingredients),
         Filter::Ingredients => app_state.filter.set(Filter::Title),
+    };
+    let handle_keyup = move |event: KeyboardEvent| {
+        if event.key() == "Enter" {
+            get_random_recipes;
+        }
     };
     view! { cx,
         nav(class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-indigo-700") {
@@ -85,36 +93,38 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                             }
                         }
                     }
-                    li {
-                        a (href="#", on:click=remove_all_recipes, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-red-900 sm:bg-transparent hover:bg-red-900 group") {
+                    li(class="border-b border-b-indigo-700") {
+                        a (href="#", on:click=remove_all_recipes, class="flex items-center p-2 mb-2 text-white transition duration-75 rounded-lg bg-red-900 sm:bg-transparent hover:bg-red-900 group") {
                             span (class="ml-4") {
                                 "Remove All"
                             }
                         }
                     }
-                    li {
+                    li(class="border-b border-b-indigo-700") {
                         label(for="filters", class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") {
                             "Search by:"
                         }
-                        select(id="filters", on:change=toggle_filter, class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-700 focus:border-indigo-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-700 dark:focus:border-indigo-700") {
+                        select(id="filters", on:change=toggle_filter, class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-700 focus:border-indigo-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-700 dark:focus:border-indigo-700") {
                             RecipeFilter(filter=Filter::Title)
                             RecipeFilter(filter=Filter::Ingredients)
                         }
 
                     }
-                    li {
+                    li(class="border-b border-b-indigo-700"){
                         label(for="steps-range", class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") {
                             "Max time: " (slider_value.get()) " minutes"
                         }
-                        input(id="steps-range", type="range", on:change=update_time_state, bind:value=slider_value, min=min_time, max=max_time, value="30", step="5", class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700") {}
+                        input(id="steps-range", type="range", on:change=update_time_state, bind:value=slider_value, min=min_time, max=max_time, value="30", step="5", class="w-full h-2 mb-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700") {}
                     }
                     li {
-                        label(for="exampleFormControlInputNumber", class="pointer-events-none mb-0 max-w-[90%] truncate pt-[0.37rem] leading-[1.6] text-white transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary") {
+                        label(for="exampleFormControlInputNumber", class="pointer-events-none mb-0 max-w-[90%] truncate pt-[0.37rema] leading-[1.6] text-white transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary") {
                             "Add " (recipe_counter.get())  " random recipes:"
                         }
-                        input(type="number", bind:value=recipe_counter, class="peer block min-h-[auto] w-full rounded border-0 bg-gray-700 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-white dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0", id="exampleFormControlInputNumber", placeholder="Example label") {}
-                        button(class="rounded bg-gray-700 text-white", on:click=get_random_recipes) {
-                            "Search"
+                        div(class="justify-between") {
+                            input(on:keyup=handle_keyup, type="number", bind:value=recipe_counter, class="peer min-h-[auto] w-3/4 rounded border-0 bg-gray-700 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-white dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0", id="exampleFormControlInputNumber", placeholder="Example label") {}
+                            button(class="p-1.5 rounded bg-gray-700 text-white float-right", on:click=get_random_recipes) {
+                                "Add"
+                            }
                         }
                     }
                 }
