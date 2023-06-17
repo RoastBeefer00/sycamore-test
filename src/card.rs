@@ -70,33 +70,35 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                 }
             }
             (if *body_visible.get() {
-                // ingredients
                 view! { cx, 
-                    div(class="border-b border-l border-r p-5 bg-gray-300") {
-                        p(class="font-bold") {
-                            "Ingredients:"
+                    div(class="bg-indigo-900 p-4 rounded-b") {
+                        // ingredients
+                        div(class="border-b border-l border-r p-5 bg-gray-300 mb-4 rounded") {
+                            p(class="font-bold") {
+                                "Ingredients:"
+                            }
+                            ul(class="list-disc m-2") {
+                                Indexed(
+                                    iterable=ingredients,
+                                    view=|cx, ingredient| view! { cx,
+                                        li { (ingredient) }    
+                                    },
+                                ) 
+                            }
                         }
-                        ul(class="list-disc m-2") {
-                            Indexed(
-                                iterable=ingredients,
-                                view=|cx, ingredient| view! { cx,
-                                    li { (ingredient) }    
-                                },
-                            ) 
-                        }
-                    }
-                    // steps
-                    div(class="rounded-b border-b border-l border-r p-5 bg-gray-300") {
-                        p(class="font-bold") {
-                            "Steps:"
-                        }
-                        ul(class="list-decimal m-2") {
-                            Indexed(
-                                iterable=steps,
-                                view=|cx, step| view! { cx,
-                                    li { (step) }    
-                                },
-                            )  
+                        // steps
+                        div(class="rounded-b border-b border-l border-r p-5 bg-gray-300 rounded") {
+                            p(class="font-bold") {
+                                "Steps:"
+                            }
+                            ul(class="list-decimal m-2") {
+                                Indexed(
+                                    iterable=steps,
+                                    view=|cx, step| view! { cx,
+                                        li(class="border-b border-indigo-700 m-2") { (step) }    
+                                    },
+                                )  
+                            }
                         }
                     }
                 }
