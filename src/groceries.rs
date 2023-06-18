@@ -65,7 +65,7 @@ pub fn combine_ingredients(ingredients: Vec<Ingredient>) -> Vec<Ingredient> {
             let ingredient_i = ingredients.get(i).unwrap();
             let ingredient_j = ingredients.get(j).unwrap();
             if ingredient_i.item.contains(ingredient_j.item.as_str()) || ingredient_j.item.contains(ingredient_i.item.as_str()) {
-                if ingredient_i.measurement.contains(ingredient_j.measurement.as_str()) || ingredient_j.measurement.contains(ingredient_i.measurement.as_str()) {
+                if (ingredient_i.measurement == String::from("") && ingredient_j.measurement == String::from("")) || ((ingredient_i.measurement.contains(ingredient_j.measurement.as_str()) && ingredient_j.measurement != String::from("")) || (ingredient_j.measurement.contains(ingredient_i.measurement.as_str()) && ingredient_i.measurement != String::from(""))) {
                     let mut insert = Ingredient {
                         quantity: String::from(""),
                         measurement: String::from(""),
