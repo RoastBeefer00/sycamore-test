@@ -71,31 +71,31 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
             }
             (if *body_visible.get() {
                 view! { cx, 
-                    div(class="bg-indigo-900 p-4 rounded-b") {
+                    div(class="bg-slate-800 p-4 rounded-b") {
                         // ingredients
-                        div(class="border-b border-l border-r p-5 bg-gray-300 mb-4 rounded") {
-                            p(class="font-bold") {
+                        div(class="p-5 bg-indigo-700 mb-4 rounded") {
+                            p(class="font-bold text-white") {
                                 "Ingredients:"
                             }
                             ul(class="list-disc m-2") {
                                 Indexed(
                                     iterable=ingredients,
                                     view=|cx, ingredient| view! { cx,
-                                        li { (ingredient) }    
+                                        li(class="text-white") { (ingredient) }    
                                     },
                                 ) 
                             }
                         }
                         // steps
-                        div(class="rounded-b border-b border-l border-r p-5 bg-gray-300 rounded") {
-                            p(class="font-bold") {
+                        div(class="rounded-b p-5 bg-indigo-700 rounded") {
+                            p(class="font-bold text-white") {
                                 "Steps:"
                             }
                             ul(class="list-decimal m-2") {
                                 Indexed(
                                     iterable=steps,
                                     view=|cx, step| view! { cx,
-                                        li(class="border-b border-indigo-700 m-2") { (step) }    
+                                        li(class="border-b border-indigo-700 m-2 text-white") { (step) }    
                                     },
                                 )  
                             }
