@@ -73,7 +73,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                 view! { cx, 
                     div(class="bg-slate-800 p-4 rounded-b") {
                         // ingredients
-                        div(class="p-5 bg-indigo-700 mb-4 rounded") {
+                        div(class="p-5 bg-indigo-800 mb-4 rounded") {
                             p(class="font-bold text-white") {
                                 "Ingredients:"
                             }
@@ -87,7 +87,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                             }
                         }
                         // steps
-                        div(class="rounded-b p-5 bg-indigo-700 rounded") {
+                        div(class="rounded-b p-5 bg-indigo-800 rounded") {
                             p(class="font-bold text-white") {
                                 "Steps:"
                             }
@@ -95,7 +95,7 @@ pub fn RecipeCard<G: Html> (cx: Scope, recipe: Recipe) -> View<G> {
                                 Indexed(
                                     iterable=steps,
                                     view=|cx, step| view! { cx,
-                                        li(class="border-b border-indigo-700 m-2 text-white") { (step) }    
+                                        li(class="border-b border-indigo-500 m-2 text-white") { (step) }    
                                     },
                                 )  
                             }
