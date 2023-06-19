@@ -126,7 +126,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                             "Add " (recipe_counter.get())  " random recipes:"
                         }
                         div(class="justify-between") {
-                            input(on:keyup=handle_keyup, type="number", bind:value=recipe_counter, class="peer min-h-[auto] w-3/4 rounded border-0 bg-gray-700 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-white dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0", id="exampleFormControlInputNumber", placeholder="Example label") {}
+                            input(on:keyup=handle_keyup, type="number", bind:value=recipe_counter, min=0, class="peer min-h-[auto] w-3/4 rounded border-0 bg-gray-700 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-white dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0", id="exampleFormControlInputNumber", placeholder="Example label") {}
                             button(class="p-1.5 rounded bg-gray-700 text-white float-right", on:click=get_random_recipes) {
                                 "Add"
                             }
