@@ -41,7 +41,12 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
         }
     };
 
-    let toggle_modal = move |_| app_state.toggle_modal();
+    // let toggle_modal = move |_| app_state.toggle_modal();
+    let toggle_modal_and_sidebar = move |_| {
+        sidebar_class.set(sidebar_class_closed.to_string());
+        sidebar_open.set(false);
+        app_state.toggle_modal();
+    };
 
     let remove_all_recipes = move |_| app_state.remove_all_recipes();
     let get_random_recipes = move |_| {
@@ -88,7 +93,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
                 ul (class="pt-4 sm:mt-4 space-y-2 font-medium") {
                     li {
                         // Modal toggle
-                        a (href="#", on:click=toggle_modal, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-indigo-700 sm:bg-transparent hover:bg-indigo-700 group") { span (class="ml-4") {
+                        a (href="#", on:click=toggle_modal_and_sidebar, class="flex items-center p-2 text-white transition duration-75 rounded-lg bg-indigo-700 sm:bg-transparent hover:bg-indigo-700 group") { span (class="ml-4") {
                                 "Grocery List"
                             }
                         }
