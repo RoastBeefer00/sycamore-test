@@ -1,6 +1,12 @@
 # Sycamore Recipe Website
 This site is built on the Sycamore framwork, so the entire thing is written in Rust! <3
 
+## Install
+```bash
+cargo install trunk
+rustup target add wasm32-unknown-unknown
+```
+
 ## How to run
 ```bash
 trunk serve
