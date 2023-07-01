@@ -8,8 +8,8 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
     let sidebar_class = create_signal(cx, String::new());
     let sidebar_open = create_signal(cx, false);
     let recipe_counter = create_signal(cx, String::new());
-    let sidebar_class_closed="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -translate-x-full sm:translate-x-0";
-    let sidebar_class_open="fixed top-0 left-0 z-40 w-64 pt-20 h-screen transition-transform -translate-x-0 sm:translate-x-0";
+    let sidebar_class_closed="fixed top-0 left-0 z-20 w-64 pt-20 h-screen transition-transform -translate-x-full sm:translate-x-0";
+    let sidebar_class_open="fixed top-0 left-0 z-20 w-64 pt-20 h-screen transition-transform -translate-x-0 sm:translate-x-0";
 
     sidebar_class.set(sidebar_class_closed.to_string());
 
@@ -68,7 +68,7 @@ pub fn Sidebar<G: Html> (cx: Scope) -> View<G> {
         }
     };
     view! { cx,
-        nav(class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-indigo-700") {
+        nav(class="fixed top-0 z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-indigo-700") {
           div(class="px-3 py-3 lg:px-5 lg:pl-3") { 
             div(class="flex items-center justify-between") {
               div(class="flex items-center justify-start sm:justify-center w-full") {

@@ -128,10 +128,10 @@ pub fn GroceriesModal<G: Html> (cx: Scope) -> View<G> {
 
     let toggle_modal = move |_| app_state.toggle_modal();
     view! { cx,
-        div(id="defaultModal", on:click=toggle_modal,tabindex="-1", aria-hidden="true", class="absolute mx-auto z-50 w-full p-4 overflow-x-hidden overflow-y-auto inset-0 h-[calc(100%-1rem)] max-h-full") {
+        div(id="defaultModal", tabindex="-1", aria-hidden="true", class="absolute mx-auto z-40 w-full p-4 overflow-x-hidden overflow-y-auto inset-0 h-[calc(100%-1rem)] max-h-full") {
             // div(class="relative w-full max-w-2xl mx-auto max-h-full border-4 border-indigo-700") {
                 // <!-- Modal content -->
-                div(class="relative rounded-lg w-5/6 sm:w-1/2 shadow dark:bg-gray-800 border-4 border-indigo-700 mx-auto my-10") { 
+                div(class="relative rounded-lg w-5/6 sm:w-1/2 z-50 shadow dark:bg-gray-800 border-4 border-indigo-700 mx-auto my-10") { 
                     // <!-- Modal header -->
                     div(class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600") {
                         h3(class="text-xl font-semibold text-gray-900 dark:text-white") {
