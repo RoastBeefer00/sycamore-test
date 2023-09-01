@@ -5292,6 +5292,12 @@ pub static RECIPES: &str = "[
             \"steps\": [\"Prep: Rinse and dry the produce. Chop the scallions and cilantro, cut the lime in half, and cut asparagus spears into 1 inch pieces. Drain tofu, cut into 1 inch cubes, wrap in paper towel and press firmly to get rid of moisture. Open the coconut milk and set aside.\", \"Pour brown rice into a medium pot. Add 4 cups of water, and bring to a boil. Reduce heat to low, cover and let simmer until rice is completely cooked, about 25-30 minutes. \", \"Coat a large saute pan with 1 tablespoon vegetable oil over medium heat. Add tofu cubes in a single layer and cook until slightly browned on bottom, about 5 minutes. Using a spatula, flip the tofu to brown the other sides, for another 5 minutes. Transfer tofu to a plate and set aside. \", \"Using the same pan, add the coconut milk, curry paste and brown sugar.  Stir and bring to a simmer.\", \"Add the asparagus to the coconut broth and continue to simmer for 2 minutes. Then add the tofu cubes and stir to incorporate. \", \"To serve, add the brown rice to bowls and top with tofu curry mix. Garnish with cilantro, scallions and a squeeze of lime. \"]
         },
         {
+            \"name\": \"Vegan Lunch Meat\",
+            \"time\": \"10 min\",
+            \"ingredients\": [\"2 cups vital wheat gluten\", \"2 tsp garlic powder\", \"2 tsp onion powder\", \"1 tsp salt\", \"2 tbsp meat flavored seasoning\", \"2 cups cold water\"],
+            \"steps\": [\"Mix the dry ingredients: gluten, garlic powder, onion powder, salt, and (optionally) the seasoning packet of your choice. Stir with your hand to combine.\", \"Add water to the dry mix and stir with your hand to make a dough. Squeeze gently and knead 2-3 times to endure all the gluten flour and water is combined.\", \"Wrap in foil\", \"Steam for 1 hour. Roast should be 180F+ after the steam.\", \"Let it cool to room temp slice up, and enjoy. Rest overnight if you prefer a more firm texture.\"]
+        },
+        {
             \"name\": \"Biscuits and Gravy\",
             \"time\": \"30 min\",
             \"ingredients\": [\"1 package of biscuits\", \"1.33 cups all purpose flour\", \"3 cups unsweetened cashew milk\", \"14 oz sausage crumbles\", \"1 tbsp butter\", \".8 tsp dried thyme\", \".8 tsp dried crushed rosemary\", \".8 tsp crushed red pepper flakes\", \"1 tsp salt\", \".5 tsp ground black pepper\"],
